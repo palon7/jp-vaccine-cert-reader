@@ -1,10 +1,13 @@
 import { useSHCDecode } from "./module/UseSHCDecode";
 import QrReader from "react-qr-reader";
 import { ReadResults } from "./components/ReadResults";
+import { useState } from "react";
 
 function App() {
   const { setQrcodeText, decodedData, isWaiting, isLoading, isValid } =
     useSHCDecode();
+
+  const [facingMode, setFacingMode] = useState("environment");
 
   const handleQR = (data) => {
     if (data !== null) {
@@ -37,11 +40,19 @@ function App() {
       </ul>
       <div className="row">
         <div className="col-lg-5">
+          <select
+            value={facingMode}
+            onChange={(e) => setFacingMode(e.target.value)}
+          >
+            <option value="environment">外向きカメラ</option>
+            <option value="user">内向きカメラ</option>
+          </select>
           <QrReader
             delay={300}
             onError={handleError}
             onScan={handleQR}
             style={{ width: "100%" }}
+            facingMode={facingMode}
           />
         </div>
         <div className="col-lg-7">
